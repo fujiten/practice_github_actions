@@ -1,5 +1,9 @@
 name: action test
-on: push
+on:
+  push:
+    tags:
+      - 'v*'
+
 
 jobs:
   build:
@@ -20,10 +24,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          release_name: Vertification ${{ github.ref }}
           body: |
-            Changes in this Release
-            - First Change
-            - Second Change
+            Windows(exe) only
           draft: false
           prerelease: false
