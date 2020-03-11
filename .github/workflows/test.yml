@@ -37,5 +37,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: test/index.js
-          asset_name: github.ref_is_${{ github.refs.tags.name }}
+          asset_name: github.ref_is_${{ github.ref.tags }}
           asset_content_type: application/octet-stream
