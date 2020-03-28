@@ -1,0 +1,41 @@
+name: action test
+on:
+  push:
+    tags:
+      - 'v*'
+
+
+jobs:
+  build:
+    name: test
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+      - name: test artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: newest-installer-for-win
+          path: test/index.js
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Vertification ${{ github.ref }}
+          body: |
+            Windows(exe) only
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: test/index.js
+          asset_name: github.ref_is_${{ github.ref.tags }}
+          asset_content_type: application/octet-stream
